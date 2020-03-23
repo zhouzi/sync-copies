@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const path = require("path");
-const getPort = require("get-port");
 const meow = require("meow");
 const serve = require("./serve");
 
@@ -35,6 +34,6 @@ const { input, flags } = meow(
   serve({
     folders: input.map(inputPath => path.resolve(inputPath)),
     ignore: flags.ignore ? [flags.ignore] : [],
-    port: flags.port || (await getPort())
+    port: flags.port
   });
 })();

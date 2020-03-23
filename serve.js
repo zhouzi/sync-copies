@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const getPort = require("get-port");
 const open = require("open");
 const minimatch = require("minimatch");
 const express = require("express");
@@ -67,8 +68,9 @@ async function serve(opts) {
     res.sendFile(path.join(__dirname, "./build/index.html"));
   });
 
-  app.listen(opts.port, () => {
-    const url = `http://localhost:${opts.port}/`;
+  const port = opts.port || (await getPort());
+  app.listen(port, () => {
+    const url = `http://localhost:${port}/`;
 
     console.log(`Now serving on ${url}`);
     open(url);
