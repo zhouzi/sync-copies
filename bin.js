@@ -22,6 +22,10 @@ const { input, flags } = meow(
       ignore: {
         type: "string",
         alias: "i"
+      },
+      port: {
+        type: "string",
+        alias: "p"
       }
     }
   }
