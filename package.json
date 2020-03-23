@@ -1,6 +1,6 @@
 {
   "name": "sync-copies",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Assistant to keep files copies synchronized.",
   "keywords": [
     "duplicates",
@@ -18,10 +18,10 @@
   "license": "MIT",
   "author": "Gabin Aureche <hello@gabinaureche.com> (https://gabinaureche.com)",
   "files": [
-    "./build",
-    "./bin.js",
-    "./index.js",
-    "./serve.js"
+    "build",
+    "bin.js",
+    "index.js",
+    "serve.js"
   ],
   "main": "./index.js",
   "bin": {
