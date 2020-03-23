@@ -41,7 +41,7 @@
     "open": "^7.0.3"
   },
   "scripts": {
-    "prepublish": "yarn build",
+    "prepack": "yarn build",
     "start": "concurrently 'nodemon ./bin.js ./examples/README1/ ./examples/README2/ --port 3001' 'react-scripts start'",
     "build": "react-scripts build",
     "test": "react-scripts test",
