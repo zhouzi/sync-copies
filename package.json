@@ -1,26 +1,53 @@
 {
   "name": "sync-copies",
   "version": "0.1.0",
-  "private": true,
+  "description": "Assistant to keep files copies synchronized.",
+  "keywords": [
+    "duplicates",
+    "synchronize",
+    "copies",
+    "copy",
+    "files",
+    "links"
+  ],
+  "homepage": "https://github.com/Zhouzi/sync-copies",
+  "bugs": {
+    "url": "https://github.com/Zhouzi/sync-copies/issues",
+    "email": "hello@gabinaureche.com"
+  },
+  "license": "MIT",
+  "author": "Gabin Aureche <hello@gabinaureche.com> (https://gabinaureche.com)",
+  "files": [
+    "./build",
+    "./bin.js",
+    "./index.js",
+    "./serve.js"
+  ],
+  "main": "./index.js",
+  "bin": {
+    "sync-copies": "./bin.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Zhouzi/sync-copies.git"
+  },
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "typescript": "~3.7.2"
+    "body-parser": "^1.19.0",
+    "diff": "^4.0.2",
+    "express": "^4.17.1",
+    "get-port": "^5.1.1",
+    "meow": "^6.1.0",
+    "minimatch": "^3.0.4",
+    "open": "^7.0.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "prepublish": "yarn build",
+    "start": "concurrently 'nodemon ./bin.js ./examples/README1/ ./examples/README2/ --port 3001' 'react-scripts start'",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:3001",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -35,5 +62,21 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/diff": "^4.0.2",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
+    "typescript": "^3.8.3"
   }
 }
