@@ -1,5 +1,7 @@
 import * as React from "react";
 import { diffChars } from "diff";
+import styled, { createGlobalStyle, css } from "styled-components";
+import "modern-normalize/modern-normalize.css";
 
 interface FileVersion {
   path: string;
@@ -27,6 +29,126 @@ enum Layout {
   Horizontal = "Horizontal",
   Vertical = "Vertical"
 }
+
+const GlobalStyle = createGlobalStyle`
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 400;
+    color: #fff;
+    background-color: #272936;
+  }
+
+  pre {
+    font-family: 'Fira Mono', monospace;
+    font-weight: 300;
+  }
+`;
+
+const FileContainer = styled.article``;
+const FileBasenameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #20212c;
+  padding: 1rem 1rem 2rem 1rem;
+`;
+const FileBasenameText = styled.div`
+  font-size: 2rem;
+  flex: 1;
+`;
+const FileBasenameControls = styled.div`
+  color: #5d6c9d;
+`;
+
+const Button = styled.button<{
+  marginBefore?: boolean;
+  marginAfter?: boolean;
+  active?: boolean;
+}>`
+  font: inherit;
+  cursor: pointer;
+  color: white;
+  background: transparent;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-bottom: 2px solid #5d6c9d;
+  margin-left: ${props => (props.marginBefore ? "0.4rem" : "0")};
+  margin-right: ${props => (props.marginAfter ? "0.4rem" : "0")};
+
+  &:focus,
+  &:hover {
+    background: #ff76c7;
+    border-bottom-color: #fff;
+  }
+
+  ${props =>
+    props.active &&
+    css`
+      &,
+      &:focus,
+      &:hover {
+        background: transparent;
+        border-bottom-color: #ff76c7;
+      }
+    `}
+`;
+
+const VersionsContainer = styled.div<{ layout: Layout }>`
+  ${props =>
+    props.layout === Layout.Horizontal &&
+    css`
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+    `}
+`;
+const VersionContainer = styled.div<{ layout: Layout }>`
+  ${props => {
+    switch (props.layout) {
+      case Layout.Horizontal:
+        return css`
+          flex: 1 1 50%;
+          flex-shrink: 0;
+          border-right: 1px solid #1a1b23;
+        `;
+      default:
+        return css`
+          display: flex;
+        `;
+    }
+  }}
+`;
+const VersionControls = styled.div``;
+const VersionCode = styled.pre`
+  flex: 1;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 1rem;
+  white-space: pre-wrap;
+  margin: 0;
+`;
+
+const Diff = styled.span<{ variant: "added" | "removed" | null }>`
+  ${props => {
+    switch (props.variant) {
+      case "added":
+        return css`
+          background-color: #35684a;
+        `;
+      case "removed":
+        return css`
+          background-color: #9a3f43;
+        `;
+      default:
+        return null;
+    }
+  }}
+`;
 
 function App() {
   const [state, setState] = React.useState<State>({
@@ -130,94 +252,98 @@ function App() {
   ) as FileVersion;
 
   return (
-    <article>
-      <button type="button" onClick={() => onIgnore(currentFile)}>
-        Ignore
-      </button>{" "}
-      {state.files.length} conflicts left.
-      <h1>{currentFile.basename}</h1>
-      <button
-        type="button"
-        disabled={layout === Layout.Horizontal}
-        onClick={() => setLayout(Layout.Horizontal)}
-      >
-        Horizontal
-      </button>
-      <button
-        type="button"
-        disabled={layout === Layout.Vertical}
-        onClick={() => setLayout(Layout.Vertical)}
-      >
-        Vertical
-      </button>
-      <div
-        style={
-          layout === Layout.Horizontal
-            ? { display: "flex", width: "100%", overflowX: "auto" }
-            : {}
-        }
-      >
-        {currentFile.versions.map(version => (
-          <div
-            key={version.path}
-            style={
-              layout === Layout.Horizontal
-                ? { flex: "1 1 50%", flexShrink: 0 }
-                : {}
-            }
-          >
-            <button
+    <>
+      <GlobalStyle />
+      <FileContainer>
+        <FileBasenameContainer>
+          <FileBasenameText>{currentFile.basename}</FileBasenameText>
+          <FileBasenameControls>
+            {state.files.length} conflict{state.files.length === 1 ? "" : "s"}{" "}
+            left
+            <Button
               type="button"
-              onClick={() => onUpdateBase(currentFile.basename, version.path)}
-              disabled={version.isBase}
+              onClick={() => onIgnore(currentFile)}
+              marginBefore
             >
-              Base
-            </button>
-            <button
+              Ignore
+            </Button>
+            <Button
               type="button"
-              onClick={() => onSaveVersion(currentFile, version)}
-              disabled={state.status === Status.Saving}
+              disabled={layout === Layout.Horizontal}
+              active={layout === Layout.Horizontal}
+              onClick={() => setLayout(Layout.Horizontal)}
+              marginBefore
             >
-              {state.status === Status.Saving ? "Saving..." : "Save"}
-            </button>
-            <pre style={{ whiteSpace: "pre-wrap" }}>
-              {version.isBase
-                ? version.content
-                : diffChars(baseVersion.content, version.content).map(
-                    (change, changeIndex) => (
-                      <span
-                        key={changeIndex}
-                        style={
-                          change.added
-                            ? {
-                                color: "white",
-                                backgroundColor: "green"
-                              }
-                            : change.removed
-                            ? {
-                                color: "white",
-                                backgroundColor: "red"
-                              }
-                            : {}
-                        }
-                      >
-                        {change.value.trim().length === 0
-                          ? Array.from(
-                              change.value.matchAll(/\s/g)
-                            ).map(([match], index) => (
-                              <span key={index}>
-                                {/\n/.test(match) ? "\n" : <>&nbsp;</>}
-                              </span>
-                            ))
-                          : change.value}
-                      </span>
-                    )
-                  )}
-            </pre>
-          </div>
-        ))}
-      </div>
-    </article>
+              Horizontal
+            </Button>
+            <Button
+              type="button"
+              disabled={layout === Layout.Vertical}
+              active={layout === Layout.Vertical}
+              onClick={() => setLayout(Layout.Vertical)}
+              marginBefore
+            >
+              Vertical
+            </Button>
+          </FileBasenameControls>
+        </FileBasenameContainer>
+        <VersionsContainer layout={layout}>
+          {currentFile.versions.map(version => (
+            <VersionContainer key={version.path} layout={layout}>
+              <VersionControls>
+                <Button
+                  type="button"
+                  onClick={() =>
+                    onUpdateBase(currentFile.basename, version.path)
+                  }
+                  disabled={version.isBase}
+                  active={version.isBase}
+                  marginAfter
+                >
+                  Base
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => onSaveVersion(currentFile, version)}
+                  disabled={state.status === Status.Saving}
+                  marginAfter
+                >
+                  {state.status === Status.Saving ? "Saving..." : "Save"}
+                </Button>
+              </VersionControls>
+              <VersionCode>
+                {version.isBase
+                  ? version.content
+                  : diffChars(baseVersion.content, version.content).map(
+                      (change, changeIndex) => (
+                        <Diff
+                          key={changeIndex}
+                          variant={
+                            change.added
+                              ? "added"
+                              : change.removed
+                              ? "removed"
+                              : null
+                          }
+                        >
+                          {change.value.trim().length === 0
+                            ? Array.from(
+                                change.value.matchAll(/\s/g)
+                              ).map(([match], index) => (
+                                <span key={index}>
+                                  {/\n/.test(match) ? "\n" : <>&nbsp;</>}
+                                </span>
+                              ))
+                            : change.value}
+                        </Diff>
+                      )
+                    )}
+              </VersionCode>
+            </VersionContainer>
+          ))}
+        </VersionsContainer>
+      </FileContainer>
+    </>
   );
 }
 
