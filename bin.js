@@ -11,17 +11,18 @@ const { input, flags } = meow(
     
     Options
         --port, -p The port to listen to.
-        --ignore, -i Ignore files matching a given glob.
+        --match, -m Files to match (glob).
         --open, -o Open the app in the default browser.
     
     Examples
-        $ sync-copies ./examples/README1/ ./examples/README2/ --port 3001 --ignore *.DS_Store
+        $ sync-copies ./examples/README1/ ./examples/README2/ --port 3001 --match '*.md'
 `,
   {
     flags: {
-      ignore: {
+      match: {
         type: "string",
-        alias: "i"
+        alias: "m",
+        default: "*"
       },
       port: {
         type: "string",
@@ -29,15 +30,14 @@ const { input, flags } = meow(
       },
       open: {
         type: "boolean",
-        alias: "o"
+        alias: "o",
+        default: false
       }
     }
   }
 );
 
 serve({
-  folders: input.map(inputPath => path.resolve(inputPath)),
-  ignore: flags.ignore ? [flags.ignore] : [],
-  port: flags.port,
-  open: flags.open
+  ...flags,
+  folders: input.map(inputPath => path.resolve(inputPath))
 });

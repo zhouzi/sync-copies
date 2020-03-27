@@ -15,9 +15,7 @@ async function serve(opts) {
     const files = opts.folders.reduce((allFiles, folder) => {
       return fs
         .readdirSync(folder)
-        .filter(basename =>
-          opts.ignore.every(glob => !minimatch(basename, glob))
-        )
+        .filter(basename => minimatch(basename, opts.match))
         .reduce((acc, basename) => {
           const filePath = path.join(folder, basename);
           const content = fs.readFileSync(filePath, "utf8");
