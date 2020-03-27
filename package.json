@@ -42,7 +42,9 @@
   },
   "scripts": {
     "prepack": "yarn build",
-    "start": "concurrently 'nodemon ./bin.js ./examples/README1/ ./examples/README2/ --port 3001' 'react-scripts start'",
+    "start": "concurrently 'npm run start:server' 'npm run start:app'",
+    "start:server": "nodemon ./bin.js ./examples/README1/ ./examples/README2/ --port 3001",
+    "start:app": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

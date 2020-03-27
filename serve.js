@@ -73,7 +73,10 @@ async function serve(opts) {
     const url = `http://localhost:${port}/`;
 
     console.log(`Now serving on ${url}`);
-    open(url);
+
+    if (opts.open) {
+      open(url);
+    }
   });
 }
 
