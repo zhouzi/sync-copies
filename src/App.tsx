@@ -1,7 +1,6 @@
 import * as React from "react";
 import { diffChars } from "diff";
 import styled, { createGlobalStyle, css } from "styled-components";
-import "modern-normalize/modern-normalize.css";
 
 interface FileVersion {
   path: string;
