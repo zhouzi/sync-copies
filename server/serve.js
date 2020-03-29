@@ -101,7 +101,7 @@ async function serve(opts) {
   const port = opts.port || (await getPort());
   const url = `http://localhost:${port}/`;
 
-  app.listen(3000, () => {
+  app.listen(port, () => {
     console.log(`Now serving app on ${url}`);
 
     if (opts.open) {
