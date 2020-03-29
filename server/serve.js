@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const minimatch = require("minimatch");
 const getPort = require("get-port");
 const open = require("open");
 const { ApolloServer, gql } = require("apollo-server-express");
@@ -44,6 +45,7 @@ async function serve(opts) {
             (acc, file) => (acc.includes(file) ? acc : acc.concat([file])),
             []
           )
+          .filter(file => minimatch(file, opts.match))
           .map(file => ({
             basename: file
           }))
