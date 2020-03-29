@@ -98,9 +98,9 @@ async function serve(opts) {
     res.sendFile(path.join(__dirname, "./public/index.html"));
   });
 
-  const ports = (opts.port ? [opts.port] : []).concat([3000, 3001, 4000, 1234]);
-  const port = await getPort({ port: ports });
+  const port = opts.port || (await getPort());
   const url = `http://localhost:${port}/`;
+
   app.listen(3000, () => {
     console.log(`Now serving app on ${url}`);
 
