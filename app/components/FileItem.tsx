@@ -165,7 +165,9 @@ function FileItem(props: Props) {
         <VersionsContainer>
           {props.file.versions.map(version => (
             <VersionsItemContainer key={version.path}>
-              <VersionsItemPath>{version.path}</VersionsItemPath>
+              <VersionsItemPath title={version.path}>
+                {version.path}
+              </VersionsItemPath>
               <VersionsItemCode>
                 {version.path === baseVersion.path
                   ? version.content
