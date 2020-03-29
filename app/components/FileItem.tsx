@@ -7,8 +7,14 @@ import { File } from "../types";
 import { IconPass, IconWarning } from "../icons";
 
 const SaveFileVersion = gql`
-  mutation SaveFileVersion($basename: String, $content: String) {
-    saveFileVersion(basename: $path, content: $content)
+  mutation SaveFileVersion($basename: String!, $content: String!) {
+    saveFileVersion(basename: $basename, content: $content) {
+      basename
+      versions {
+        path
+        content
+      }
+    }
   }
 `;
 interface SaveFileVersionVariables {
@@ -182,7 +188,7 @@ function FileItem(props: Props) {
                     saveFileVersion({
                       variables: {
                         basename: props.file.basename,
-                        content: version.content
+                        content: version.content || ""
                       }
                     })
                   }

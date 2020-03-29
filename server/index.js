@@ -54,9 +54,9 @@ const resolvers = {
         }))
   },
   Mutation: {
-    saveFileVersion: ({ basename, content }) => {
+    saveFileVersion: (_, { basename, content }) => {
       folders.forEach(folder => {
-        fs.writeFileSync(path.join(folder, basename), cotent);
+        fs.writeFileSync(path.join(folder, basename), content);
       });
 
       return {
