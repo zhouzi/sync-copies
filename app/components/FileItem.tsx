@@ -182,30 +182,32 @@ function FileItem(props: Props) {
                       </Diff>
                     ))}
               </VersionsItemCode>
-              <VersionsItemControls>
-                <Button
-                  onClick={() =>
-                    saveFileVersion({
-                      variables: {
-                        basename: props.file.basename,
-                        content: version.content || ""
-                      }
-                    })
-                  }
-                >
-                  Keep this version
-                </Button>
-                <label htmlFor={`radio-${version.path}`}>
-                  <input
-                    type="radio"
-                    id={`radio-${version.path}`}
-                    name={`radio-${props.file.basename}`}
-                    checked={version.path === base}
-                    onChange={() => setBase(version.path)}
-                  />{" "}
-                  Base
-                </label>
-              </VersionsItemControls>
+              {!noDifferences && (
+                <VersionsItemControls>
+                  <Button
+                    onClick={() =>
+                      saveFileVersion({
+                        variables: {
+                          basename: props.file.basename,
+                          content: version.content || ""
+                        }
+                      })
+                    }
+                  >
+                    Keep this version
+                  </Button>
+                  <label htmlFor={`radio-${version.path}`}>
+                    <input
+                      type="radio"
+                      id={`radio-${version.path}`}
+                      name={`radio-${props.file.basename}`}
+                      checked={version.path === base}
+                      onChange={() => setBase(version.path)}
+                    />{" "}
+                    Base
+                  </label>
+                </VersionsItemControls>
+              )}
             </VersionsItemContainer>
           ))}
         </VersionsContainer>
