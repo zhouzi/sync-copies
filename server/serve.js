@@ -7,6 +7,10 @@ const { ApolloServer, gql } = require("apollo-server-express");
 const express = require("express");
 
 async function serve(opts) {
+  if (opts.folders.length <= 0) {
+    throw new Error(`A list of folders must be provided.`);
+  }
+
   const typeDefs = gql`
     type FileVersion {
       path: String!

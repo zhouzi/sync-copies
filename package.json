@@ -1,6 +1,6 @@
 {
   "name": "sync-copies",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Assistant to keep files copies synchronized.",
   "keywords": [
     "duplicates",
@@ -46,9 +46,18 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "prepack": "parcel ./app/index.html -d ./server/public",
+    "prepack": "yarn build:app",
     "start": "concurrently 'yarn start:server' 'yarn start:app'",
     "start:server": "nodemon ./server/bin.js ./examples/package-a ./examples/package-b ./examples/package-c ./examples/package-d --match '*.md' --open --port 3000",
-    "start:app": "parcel watch ./app/index.html -d ./server/public"
+    "start:app": "parcel watch ./app/index.html -d ./server/public",
+    "prebuild:app": "rm -rf ./server/public/*{.html,.js,.css,.map}",
+    "build:app": "parcel build ./app/index.html -d ./server/public"
+  },
+  "files": [
+    "server"
+  ],
+  "main": "server/index.js",
+  "bin": {
+    "sync-copies": "server/bin.js"
   }
 }
