@@ -10,12 +10,12 @@ const { input, flags } = meow(
         $ sync-copies <folders>
     
     Options
+        --match, -m Files to match (glob).    
         --port, -p The port to listen to.
-        --match, -m Files to match (glob).
         --open, -o Open the app in the default browser.
     
     Examples
-        $ sync-copies ./examples/README1/ ./examples/README2/ --port 3001 --match '*.md'
+        $ sync-copies ./packages/package-a/ ./packages/package-b/ --match '*.md'
 `,
   {
     flags: {

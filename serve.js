@@ -6,51 +6,83 @@ const minimatch = require("minimatch");
 const express = require("express");
 const bodyParser = require("body-parser");
 
+function createVersion(folder, basename) {
+  return {
+    path: path.join(folder, basename),
+    content: null
+  };
+}
+
+function createVersions(basename, folders) {
+  return folders.reduce(
+    (versions, folder) =>
+      Object.assign(versions, {
+        [folder]: createVersion(folder, basename)
+      }),
+    {}
+  );
+}
+
+function createFileCopy(basename, folders) {
+  return {
+    basename,
+    versions: createVersions(basename, folders)
+  };
+}
+
+function createFilesCopies(folders, match) {
+  return folders.reduce(
+    (acc, folder) =>
+      fs
+        .readdirSync(folder)
+        .filter(basename => minimatch(basename, match))
+        .filter(basename => acc[basename] == null)
+        .reduce(
+          (acc, basename) =>
+            Object.assign(acc, {
+              [basename]: createFileCopy(basename, folders)
+            }),
+          acc
+        ),
+    {}
+  );
+}
+
+function readVersionContent(version) {
+  return {
+    ...version,
+    content: fs.existsSync(version.path)
+      ? fs.readFileSync(version.path, "utf8")
+      : null
+  };
+}
+
+function readVersionsContent(map) {
+  return Object.keys(map).reduce((files, basename) => {
+    const file = map[basename];
+
+    return Object.assign(files, {
+      [basename]: {
+        ...file,
+        versions: Object.keys(file.versions).reduce(
+          (versions, folder) =>
+            Object.assign(versions, {
+              [folder]: readVersionContent(file.versions[folder])
+            }),
+          {}
+        )
+      }
+    });
+  }, {});
+}
+
 async function serve(opts) {
   const app = express();
 
   app.use(bodyParser.json());
 
   app.get("/api/files", (req, res) => {
-    const files = opts.folders.reduce((allFiles, folder) => {
-      return fs
-        .readdirSync(folder)
-        .filter(basename => minimatch(basename, opts.match))
-        .reduce((acc, basename) => {
-          const filePath = path.join(folder, basename);
-          const content = fs.readFileSync(filePath, "utf8");
-
-          return Object.assign(acc, {
-            [basename]: Object.assign(
-              allFiles[basename] ||
-                opts.folders.reduce((acc, otherFolder) => {
-                  const otherFilePath = path.join(otherFolder, basename);
-                  return Object.assign(acc, {
-                    [otherFilePath]: ""
-                  });
-                }, {}),
-              {
-                [filePath]: content
-              }
-            )
-          });
-        }, allFiles);
-    }, {});
-
-    res.json(
-      Object.keys(files)
-        .filter(basename => {
-          const file = files[basename];
-          const contents = Object.values(file);
-
-          return contents.some(content => content !== contents[0]);
-        })
-        .reduce(
-          (acc, basename) =>
-            Object.assign(acc, { [basename]: files[basename] }),
-          {}
-        )
-    );
+    res.json(readVersionsContent(createFilesCopies(opts.folders, opts.match)));
   });
 
   app.post("/api/files", (req, res) => {

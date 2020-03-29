@@ -43,7 +43,7 @@
   "scripts": {
     "prepack": "yarn build",
     "start": "concurrently 'npm run start:server' 'npm run start:app'",
-    "start:server": "nodemon ./bin.js ./examples/README1/ ./examples/README2/ --port 3001 --match '*.md'",
+    "start:server": "nodemon ./bin.js ./examples/package-a/ ./examples/package-b/ ./examples/package-c/ ./examples/package-d/ --port 3001 --match '*.md'",
     "start:app": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
