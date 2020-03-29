@@ -48,7 +48,7 @@
   "scripts": {
     "prepack": "yarn build:app",
     "start": "concurrently 'yarn start:server' 'yarn start:app'",
-    "start:server": "nodemon ./server/bin.js ./examples/package-a ./examples/package-b ./examples/package-c ./examples/package-d --match '*.md' --open --port 3000",
+    "start:server": "nodemon ./server/bin.js ./examples/package-a ./examples/package-b ./examples/package-c ./examples/package-d --match '*.md' --port 3000",
     "start:app": "parcel watch ./app/index.html -d ./server/public",
     "prebuild:app": "rm -rf ./server/public/*{.html,.js,.css,.map}",
     "build:app": "parcel build ./app/index.html -d ./server/public"
