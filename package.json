@@ -17,71 +17,34 @@
   },
   "license": "MIT",
   "author": "Gabin Aureche <hello@gabinaureche.com> (https://gabinaureche.com)",
-  "files": [
-    "build",
-    "bin.js",
-    "index.js",
-    "serve.js"
-  ],
-  "main": "./index.js",
-  "bin": {
-    "sync-copies": "./bin.js"
-  },
   "repository": {
     "type": "git",
     "url": "git@github.com:Zhouzi/sync-copies.git"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "diff": "^4.0.2",
+    "apollo-server-express": "^2.11.0",
     "express": "^4.17.1",
-    "get-port": "^5.1.1",
-    "meow": "^6.1.0",
-    "minimatch": "^3.0.4",
-    "open": "^7.0.3"
-  },
-  "scripts": {
-    "prepack": "yarn build",
-    "start": "concurrently 'npm run start:server' 'npm run start:app'",
-    "start:server": "nodemon ./bin.js ./examples/package-a/ ./examples/package-b/ ./examples/package-c/ ./examples/package-d/ --port 3001 --match '*.md'",
-    "start:app": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "proxy": "http://localhost:3001",
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "graphql": "^14.6.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    "@apollo/react-hooks": "^3.1.3",
     "@types/diff": "^4.0.2",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
     "@types/styled-components": "^5.0.1",
+    "apollo-boost": "^0.4.7",
     "concurrently": "^5.1.0",
+    "diff": "^4.0.2",
     "modern-normalize": "^0.6.0",
     "nodemon": "^2.0.2",
+    "parcel-bundler": "^1.12.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
     "styled-components": "^5.0.1",
     "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "prepack": "parcel ./app/index.html -d ./server/public",
+    "start": "concurrently 'yarn start:server' 'yarn start:app'",
+    "start:server": "nodemon ./server",
+    "start:app": "parcel watch ./app/index.html -d ./server/public"
   }
 }
