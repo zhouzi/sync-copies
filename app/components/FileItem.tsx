@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import { diffChars } from "diff";
 import { File } from "../types";
+import hasDifferences from "../hasDifferences";
 import { IconPass, IconWarning } from "../icons";
 
 const SaveFileVersion = gql`
@@ -32,7 +33,7 @@ const Container = styled.div<{ expanded: boolean }>`
   ${props =>
     props.expanded &&
     css`
-      padding-bottom: 1rem;
+      padding: 1rem 0 2rem 0;
     `}
 `;
 const BasenameContainer = styled.h2.attrs({ role: "button", tabIndex: 0 })<{
@@ -141,9 +142,7 @@ function FileItem(props: Props) {
   const baseVersion = props.file.versions.find(
     version => version.path === base
   );
-  const noDifferences = props.file.versions.every(
-    (version, index, versions) => version.content === versions[0].content
-  );
+  const noDifferences = !hasDifferences(props.file);
 
   return (
     <Container expanded={props.expanded}>

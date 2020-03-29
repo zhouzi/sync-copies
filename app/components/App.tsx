@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { File } from "../types";
+import hasDifferences from "../hasDifferences";
 import FileItem from "./FileItem";
 
 const GetFilesList = gql`
@@ -46,10 +47,16 @@ function App() {
   const { data } = useQuery<GetFilesListData>(GetFilesList);
   const [basename, setBasename] = React.useState<string | null>(null);
 
-  // FIXME: the app crashes when there are no files
-
   React.useEffect(() => {
-    setBasename(data?.files[0].basename);
+    if (data == null || data.files.length <= 0) {
+      setBasename(null);
+      return;
+    }
+
+    const fileWithDifferences = data.files.find(hasDifferences);
+    const file = fileWithDifferences || data.files[0];
+
+    setBasename(file.basename);
   }, [data?.files]);
 
   return (
