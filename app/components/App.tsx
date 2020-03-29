@@ -46,6 +46,8 @@ function App() {
   const { data } = useQuery<GetFilesListData>(GetFilesList);
   const [basename, setBasename] = React.useState<string | null>(null);
 
+  // FIXME: the app crashes when there are no files
+
   React.useEffect(() => {
     setBasename(data?.files[0].basename);
   }, [data?.files]);
