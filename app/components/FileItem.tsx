@@ -75,7 +75,7 @@ const VersionsItemContainer = styled.div`
 `;
 const VersionsItemPath = styled.div`
   color: #667c94;
-  padding: 0.4rem 1rem;
+  padding: 0.4rem 2rem;
   background-color: #071425;
   white-space: nowrap;
   overflow: hidden;
@@ -85,7 +85,7 @@ const VersionsItemCode = styled.pre`
   flex: 1;
   margin: 0;
   font-size: 0.8em;
-  padding: 1rem;
+  padding: 1rem 2rem;
 `;
 const Diff = styled.span<{ variant: "added" | "removed" | null }>`
   ${props => {
@@ -106,7 +106,7 @@ const Diff = styled.span<{ variant: "added" | "removed" | null }>`
   }}
 `;
 const VersionsItemControls = styled.div`
-  padding: 1rem 1rem 2rem 1rem;
+  padding: 1rem 2rem 2rem 2rem;
 
   & > button {
     margin-right: 0.8rem;

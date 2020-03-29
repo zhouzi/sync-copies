@@ -27,7 +27,7 @@ interface GetFilesListData {
 
 const Container = styled.main``;
 const Summary = styled.h1`
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   line-height: 1.2;
   font-weight: normal;
   margin: 0;
