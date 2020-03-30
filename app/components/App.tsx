@@ -26,13 +26,15 @@ interface GetFilesListData {
   files: File[];
 }
 
-const Container = styled.main``;
+const Container = styled.main`
+  padding: 4rem 0;
+`;
 const Summary = styled.h1`
   font-size: 1.8rem;
   line-height: 1.2;
   font-weight: normal;
   margin: 0;
-  padding: 4rem 2rem 2rem 2rem;
+  padding: 0 2rem 2rem 2rem;
 `;
 const Strong = styled.strong`
   color: #ea3db6;
