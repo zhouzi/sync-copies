@@ -1,4 +1,7 @@
 {
+  "env": {
+    "jest": true
+  },
   "extends": [
     "airbnb-base",
     "plugin:node/recommended",
@@ -6,8 +9,14 @@
     "prettier",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["security"],
+  "plugins": ["security", "jest"],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "node/no-unpublished-require": [
+      "error",
+      {
+        "allowModules": ["mock-fs"]
+      }
+    ]
   }
 }

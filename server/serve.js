@@ -1,10 +1,11 @@
 const path = require("path");
-const fs = require("fs");
-const minimatch = require("minimatch");
 const getPort = require("get-port");
 const open = require("open");
 const { ApolloServer, gql } = require("apollo-server-express");
 const express = require("express");
+const getFiles = require("./getFiles");
+const saveFile = require("./saveFile");
+const getFileContent = require("./getFileContent");
 
 async function serve(opts) {
   if (opts.folders.length <= 0) {
@@ -41,48 +42,39 @@ async function serve(opts) {
       match: () => {
         return opts.match;
       },
-      files: () =>
-        opts.folders
-          .map((folder) => fs.readdirSync(folder))
-          .reduce((acc, files) => acc.concat(files), [])
-          .reduce(
-            (acc, file) => (acc.includes(file) ? acc : acc.concat([file])),
-            []
-          )
-          .filter((file) => minimatch(file, opts.match))
-          .map((file) => ({
-            basename: file
-          }))
+      files: async () => {
+        const files = await getFiles(opts.folders, opts.match);
+        return files.map((basename) => ({ basename }));
+      }
     },
     Mutation: {
-      saveFileVersion: (_, { basename, content }) => {
-        opts.folders.forEach((folder) => {
-          fs.writeFileSync(path.join(folder, basename), content);
-        });
+      saveFileVersion: async (_, { basename, content }) => {
+        const versions = opts.folders.map((folder) => ({
+          path: path.join(folder, basename),
+          content
+        }));
+
+        await Promise.all(
+          versions.map((version) => saveFile(version.path, version.content))
+        );
 
         return {
           basename,
-          versions: opts.folders.map((folder) => ({
-            path: path.join(folder, basename),
-            content
-          }))
+          versions
         };
       }
     },
     File: {
-      versions: ({ basename }) => {
+      versions: (parent) => {
         return opts.folders.map((folder) => ({
-          path: path.join(folder, basename),
+          path: path.join(folder, parent.basename),
           content: null
         }));
       }
     },
     FileVersion: {
       content: (parent) => {
-        if (fs.existsSync(parent.path)) {
-          return fs.readFileSync(parent.path, "utf8");
-        }
-        return null;
+        return getFileContent(parent.path);
       }
     }
   };
