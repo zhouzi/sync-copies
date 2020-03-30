@@ -43,26 +43,26 @@ async function serve(opts) {
       },
       files: () =>
         opts.folders
-          .map(folder => fs.readdirSync(folder))
+          .map((folder) => fs.readdirSync(folder))
           .reduce((acc, files) => acc.concat(files), [])
           .reduce(
             (acc, file) => (acc.includes(file) ? acc : acc.concat([file])),
             []
           )
-          .filter(file => minimatch(file, opts.match))
-          .map(file => ({
+          .filter((file) => minimatch(file, opts.match))
+          .map((file) => ({
             basename: file
           }))
     },
     Mutation: {
       saveFileVersion: (_, { basename, content }) => {
-        opts.folders.forEach(folder => {
+        opts.folders.forEach((folder) => {
           fs.writeFileSync(path.join(folder, basename), content);
         });
 
         return {
           basename,
-          versions: opts.folders.map(folder => ({
+          versions: opts.folders.map((folder) => ({
             path: path.join(folder, basename),
             content
           }))
@@ -71,14 +71,14 @@ async function serve(opts) {
     },
     File: {
       versions: ({ basename }) => {
-        return opts.folders.map(folder => ({
+        return opts.folders.map((folder) => ({
           path: path.join(folder, basename),
           content: null
         }));
       }
     },
     FileVersion: {
-      content: parent => {
+      content: (parent) => {
         if (fs.existsSync(parent.path)) {
           return fs.readFileSync(parent.path, "utf8");
         }
@@ -102,6 +102,7 @@ async function serve(opts) {
   const url = `http://localhost:${port}/`;
 
   app.listen(port, () => {
+    // eslint-disable-next-line no-console
     console.log(`Now serving app on ${url}`);
 
     if (opts.open) {

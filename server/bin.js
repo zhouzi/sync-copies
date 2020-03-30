@@ -38,5 +38,5 @@ const { input, flags } = meow(
 
 serve({
   ...flags,
-  folders: input.map(inputPath => path.resolve(inputPath))
+  folders: input.map((inputPath) => path.resolve(inputPath))
 });

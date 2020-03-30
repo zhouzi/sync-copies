@@ -1,0 +1,5 @@
+.cache,
+.tmp,
+node_modules/,
+examples/,
+server/public/
