@@ -1,6 +1,6 @@
 {
   "name": "sync-copies",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Assistant to keep files copies synchronized.",
   "keywords": [
     "duplicates",
