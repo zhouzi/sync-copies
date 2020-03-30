@@ -69,7 +69,6 @@ const VersionsItemContainer = styled.div`
   flex: 1 1 50%;
   flex-shrink: 0;
   border-right: 1px solid #0d1f31;
-  white-space: pre-wrap;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -87,6 +86,7 @@ const VersionsItemCode = styled.pre`
   margin: 0;
   font-size: 0.8em;
   padding: 1rem 2rem;
+  white-space: pre-wrap;
 `;
 const Diff = styled.span<{ variant: "added" | "removed" | null }>`
   ${props => {
