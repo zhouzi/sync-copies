@@ -30,7 +30,7 @@ interface Props {
 }
 
 const Container = styled.div<{ expanded: boolean }>`
-  ${props =>
+  ${(props) =>
     props.expanded &&
     css`
       padding: 1rem 0 2rem 0;
@@ -48,14 +48,14 @@ const BasenameContainer = styled.h2.attrs({ role: "button", tabIndex: 0 })<{
 
   &:focus,
   &:hover {
-    color: #ea3db6;
+    color: ${(props) => props.theme.colors.primary};
   }
 
-  ${props =>
+  ${(props) =>
     props.active &&
     css`
       cursor: auto;
-      color: #ea3db6;
+      color: ${(props) => props.theme.colors.primary};
       font-weight: bold;
     `}
 `;
@@ -63,20 +63,21 @@ const VersionsContainer = styled.div`
   display: flex;
   width: 100%;
   overflow-x: auto;
-  background-color: #081727;
+  background-color: ${(props) => props.theme.colors.background.dark};
 `;
 const VersionsItemContainer = styled.div`
   flex: 1 1 50%;
   flex-shrink: 0;
-  border-right: 1px solid #0d1f31;
+  border-right: ${(props) =>
+    `1px solid ${props.theme.colors.background.normal}`};
   overflow: hidden;
   display: flex;
   flex-direction: column;
 `;
 const VersionsItemPath = styled.div`
-  color: #667c94;
+  color: ${(props) => props.theme.colors.text.light};
   padding: 0.4rem 2rem;
-  background-color: #071425;
+  background-color: ${(props) => props.theme.colors.background.darker};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -89,17 +90,17 @@ const VersionsItemCode = styled.pre`
   white-space: pre-wrap;
 `;
 const Diff = styled.span<{ variant: "added" | "removed" | null }>`
-  ${props => {
+  ${(props) => {
     switch (props.variant) {
       case "added":
         return css`
-          color: #fff;
-          background-color: #1c5424;
+          color: ${(props) => props.theme.colors.text.emphasis};
+          background-color: ${(props) => props.theme.colors.green};
         `;
       case "removed":
         return css`
-          color: #fff;
-          background-color: #903535;
+          color: ${(props) => props.theme.colors.text.emphasis};
+          background-color: ${(props) => props.theme.colors.red};
         `;
       default:
         return null;
@@ -126,7 +127,7 @@ const Button = styled.button.attrs({ type: "button" })`
   font-weight: bold;
   padding: 0.6rem 1rem;
   border-radius: 6px;
-  border: 1px solid #4694e6;
+  border: 1px solid ${(props) => props.theme.colors.secondary};
 
   &:focus,
   &:hover {
@@ -140,7 +141,7 @@ function FileItem(props: Props) {
   );
   const [base, setBase] = React.useState<string>(props.file.versions[0].path);
   const baseVersion = props.file.versions.find(
-    version => version.path === base
+    (version) => version.path === base
   );
   const noDifferences = !hasDifferences(props.file);
 
@@ -163,7 +164,7 @@ function FileItem(props: Props) {
       </BasenameContainer>
       {props.expanded && (
         <VersionsContainer>
-          {props.file.versions.map(version => (
+          {props.file.versions.map((version) => (
             <VersionsItemContainer key={version.path}>
               <VersionsItemPath title={version.path}>
                 {version.path}

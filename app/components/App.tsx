@@ -37,9 +37,10 @@ const Summary = styled.h1`
   padding: 0 2rem 2rem 2rem;
 `;
 const Strong = styled.strong`
-  color: #ea3db6;
+  color: ${(props) => props.theme.colors.primary};
   display: inline;
-  background-image: linear-gradient(0deg, #4694e6, #4694e6 100%);
+  background-image: ${(props) =>
+    `linear-gradient(0deg, ${props.theme.colors.secondary}, ${props.theme.colors.secondary} 100%)`};
   background-size: 100% 0.2em;
   background-repeat: no-repeat;
   background-position: 0 88%;
@@ -72,7 +73,7 @@ function App() {
             total of <Strong>{data.files.length * data.folders.length}</Strong>{" "}
             copies.
           </Summary>
-          {data.files.map(file => (
+          {data.files.map((file) => (
             <FileItem
               key={file.basename}
               file={file}
