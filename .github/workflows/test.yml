@@ -16,8 +16,11 @@ jobs:
         with:
           node-version: 12
 
+      - name: Install yarn
+        run: npm install -g yarn
+
       - name: Install Node.js dependencies
-        run: npm install
+        run: yarn
 
       - name: Run jest
         uses: stefanoeb/jest-action@1.0.2

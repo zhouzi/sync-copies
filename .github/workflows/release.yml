@@ -19,6 +19,12 @@ jobs:
         with:
           node-version: 12
 
+      - name: Install yarn
+        run: npm install -g yarn
+
+      - name: Install Node.js dependencies
+        run: yarn
+
       - name: Publish if version has been updated
         uses: pascalgn/npm-publish-action@51fdb4531e99aac1873764ef7271af448dc42ab4
         env:
