@@ -1,6 +1,6 @@
 {
   "name": "sync-copies",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Assistant to keep duplicated copies of a file identical, aka the ultimate copy/paste tool.",
   "keywords": [
     "duplicates",
