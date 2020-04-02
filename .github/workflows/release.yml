@@ -26,7 +26,7 @@ jobs:
         run: yarn
 
       - name: Publish if version has been updated
-        uses: pascalgn/npm-publish-action@51fdb4531e99aac1873764ef7271af448dc42ab4
+        uses: zhouzi/npm-publish-action@c9dedcb4ace5422b8426ad64bc0578f6e29bc07e
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
